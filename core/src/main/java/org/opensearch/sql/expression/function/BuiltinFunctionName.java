@@ -198,6 +198,8 @@ public enum BuiltinFunctionName {
   SUBSTRING(FunctionName.of("substring")),
   TRIM(FunctionName.of("trim")),
   UPPER(FunctionName.of("upper")),
+  JSON_EXTRACT(FunctionName.of("json_extract")),
+
 
   /** NULL Test. */
   IS_NULL(FunctionName.of("is null")),

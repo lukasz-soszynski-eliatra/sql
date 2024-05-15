@@ -579,6 +579,10 @@ public class DSL {
     return compile(FunctionProperties.None, BuiltinFunctionName.STRCMP, expressions);
   }
 
+  public static FunctionExpression json_extract(Expression... expressions) {
+    return compile(FunctionProperties.None, BuiltinFunctionName.JSON_EXTRACT, expressions);
+  }
+
   public static FunctionExpression right(Expression... expressions) {
     return compile(FunctionProperties.None, BuiltinFunctionName.RIGHT, expressions);
   }

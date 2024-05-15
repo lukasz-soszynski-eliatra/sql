@@ -316,6 +316,7 @@ LOCATE:                             'LOCATE';
 REPLACE:                            'REPLACE';
 REVERSE:                            'REVERSE';
 CAST:                               'CAST';
+JSON_EXTRACT:                       'JSON_EXTRACT';
 
 // BOOL FUNCTIONS
 LIKE:                               'LIKE';

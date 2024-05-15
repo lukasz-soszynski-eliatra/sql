@@ -631,6 +631,7 @@ textFunctionName
    | LOCATE
    | REPLACE
    | REVERSE
+   | JSON_EXTRACT
    ;
 
 flowControlFunctionName

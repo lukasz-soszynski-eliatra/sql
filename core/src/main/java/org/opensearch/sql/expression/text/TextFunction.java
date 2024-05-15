@@ -15,8 +15,15 @@ import static org.opensearch.sql.expression.function.FunctionDSL.nullMissingHand
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.JsonPathException;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.opensearch.sql.data.model.ExprIntegerValue;
 import org.opensearch.sql.data.model.ExprStringValue;
 import org.opensearch.sql.data.model.ExprValue;
@@ -39,6 +46,9 @@ import org.opensearch.sql.expression.function.SerializableTriFunction;
  */
 @UtilityClass
 public class TextFunction {
+
+  private static final Logger log = LogManager.getLogger(TextFunction.class);
+
   private static String EMPTY_STRING = "";
 
   /**
@@ -65,6 +75,7 @@ public class TextFunction {
     repository.register(substring());
     repository.register(trim());
     repository.register(upper());
+    repository.register(json_extract());
   }
 
   /**
@@ -256,6 +267,21 @@ public class TextFunction {
             INTEGER,
             STRING,
             STRING));
+  }
+
+  private DefaultFunctionResolver json_extract() {
+    return define(BuiltinFunctionName.JSON_EXTRACT.getName(),
+        impl((json, jsonPathExpression) -> new ExprStringValue(extractValueByJsonPath(json.stringValue(), jsonPathExpression.stringValue())),
+          STRING, STRING, STRING));
+  }
+
+  private static @NotNull String extractValueByJsonPath(String json, String jsonPath) {
+    try {
+      return JsonPath.using(Configuration.builder().build()).parse(json).read(jsonPath, String.class);
+    } catch (JsonPathException e) {
+      log.debug("Cannot extract value by json path.", e); // can appear in logs many times
+      return null;
+    }
   }
 
   /**
